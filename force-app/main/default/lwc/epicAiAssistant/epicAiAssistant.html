@@ -1,0 +1,32 @@
+<template>
+    <lightning-card title="EpicEventz AI Assistant & Event Guardian" icon-name="utility:agent_studio">
+        <div class="slds-p-around_medium">
+            <div class="slds-m-bottom_medium">
+                <lightning-input 
+                    type="text" 
+                    label="Ask EpicEventz AI" 
+                    placeholder="e.g. Recommend tech conferences or summarize feedback..." 
+                    value={queryText}
+                    onchange={handleQueryChange}>
+                </lightning-input>
+                <lightning-button 
+                    class="slds-m-top_small" 
+                    variant="brand" 
+                    label="Ask AI Assistant" 
+                    onclick={handleAskAI}>
+                </lightning-button>
+            </div>
+
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="AI Thinking..." size="small"></lightning-spinner>
+            </template>
+
+            <template if:true={aiResult}>
+                <div class="slds-box slds-theme_shade">
+                    <p class="slds-text-heading_small slds-m-bottom_x-small">🤖 AI Insight Response:</p>
+                    <p class="slds-text-body_regular">{aiResult.aiResponse}</p>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

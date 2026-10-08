@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Feedback_Only_After_Event_Started</fullName>
+    <active>true</active>
+    <description>Ensures feedback can only be submitted after an Event has started or completed.</description>
+    <errorConditionFormula>NOT(ISBLANK(Event__c)) &amp;&amp; TEXT(Event__r.Status__c) != 'In Progress' &amp;&amp; TEXT(Event__r.Status__c) != 'Completed'</errorConditionFormula>
+    <errorDisplayField>Event__c</errorDisplayField>
+    <errorMessage>Feedback can only be submitted for events that are In Progress or Completed.</errorMessage>
+</ValidationRule>

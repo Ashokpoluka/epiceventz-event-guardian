@@ -1,0 +1,24 @@
+# Salesforce DX / CLI
+.sf/
+.sfdx/
+.localdevserver/
+.project
+.settings/
+
+# Node dependencies
+node_modules/
+
+# OS / Editor temporary files
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*.log
+
+# Sensitive credentials (NEVER COMMIT)
+*.key
+*.pem
+*.p12
+.env
+.env.*
+secrets/

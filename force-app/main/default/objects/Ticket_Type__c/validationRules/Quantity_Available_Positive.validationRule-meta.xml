@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Quantity_Available_Positive</fullName>
+    <active>true</active>
+    <description>Ensures that ticket quantity available is strictly greater than zero.</description>
+    <errorConditionFormula>Quantity_Available__c &lt;= 0</errorConditionFormula>
+    <errorDisplayField>Quantity_Available__c</errorDisplayField>
+    <errorMessage>Quantity Available must be strictly greater than 0.</errorMessage>
+</ValidationRule>

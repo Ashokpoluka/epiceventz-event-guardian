@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Registration_Event_Status_Check</fullName>
+    <active>true</active>
+    <description>Prevents registration creation unless the Event is in Published or Registration Open status.</description>
+    <errorConditionFormula>ISNEW() &amp;&amp; (TEXT(Event__r.Status__c) != 'Published' &amp;&amp; TEXT(Event__r.Status__c) != 'Registration Open')</errorConditionFormula>
+    <errorMessage>Registrations can only be submitted for Events in 'Published' or 'Registration Open' status.</errorMessage>
+</ValidationRule>

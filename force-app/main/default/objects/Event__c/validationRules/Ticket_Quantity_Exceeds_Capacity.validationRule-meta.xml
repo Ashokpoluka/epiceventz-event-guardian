@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Ticket_Quantity_Exceeds_Capacity</fullName>
+    <active>true</active>
+    <description>Prevents total allocated ticket quantity across all ticket types from exceeding the overall Event Capacity.</description>
+    <errorConditionFormula>NOT(ISBLANK(Capacity__c)) &amp;&amp; Total_Ticket_Quantity__c &gt; Capacity__c</errorConditionFormula>
+    <errorMessage>Total allocated ticket quantity across all ticket types cannot exceed the Event Capacity.</errorMessage>
+</ValidationRule>

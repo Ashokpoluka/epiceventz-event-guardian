@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Event_Capacity_Exceeds_Venue</fullName>
+    <active>true</active>
+    <description>Prevents Event capacity from exceeding max physical capacity of the assigned Venue.</description>
+    <errorConditionFormula>NOT(ISBLANK(Venue__c)) &amp;&amp; NOT(ISBLANK(Capacity__c)) &amp;&amp; Capacity__c &gt; Venue__r.Capacity__c</errorConditionFormula>
+    <errorDisplayField>Capacity__c</errorDisplayField>
+    <errorMessage>Event Capacity cannot exceed the maximum physical capacity of the assigned Venue.</errorMessage>
+</ValidationRule>

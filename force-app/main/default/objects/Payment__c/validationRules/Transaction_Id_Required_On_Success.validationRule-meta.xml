@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Transaction_Id_Required_On_Success</fullName>
+    <active>true</active>
+    <description>Ensures Transaction Id is populated when Payment Status is set to Success.</description>
+    <errorConditionFormula>TEXT(Payment_Status__c) = 'Success' &amp;&amp; ISBLANK(Transaction_Id__c)</errorConditionFormula>
+    <errorDisplayField>Transaction_Id__c</errorDisplayField>
+    <errorMessage>Transaction Id is required when Payment Status is Success.</errorMessage>
+</ValidationRule>

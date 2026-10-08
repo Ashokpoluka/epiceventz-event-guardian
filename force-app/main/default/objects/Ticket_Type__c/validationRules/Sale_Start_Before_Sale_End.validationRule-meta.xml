@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sale_Start_Before_Sale_End</fullName>
+    <active>true</active>
+    <description>Ensures that ticket sale start date is strictly before sale end date.</description>
+    <errorConditionFormula>NOT(ISBLANK(Sale_Start_Date__c)) &amp;&amp; NOT(ISBLANK(Sale_End_Date__c)) &amp;&amp; Sale_End_Date__c &lt;= Sale_Start_Date__c</errorConditionFormula>
+    <errorDisplayField>Sale_End_Date__c</errorDisplayField>
+    <errorMessage>Ticket Sale End Date must be strictly after the Sale Start Date.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rating_Range_Check</fullName>
+    <active>true</active>
+    <description>Ensures feedback rating is strictly between 1 and 5.</description>
+    <errorConditionFormula>Rating__c &lt; 1 || Rating__c &gt; 5</errorConditionFormula>
+    <errorDisplayField>Rating__c</errorDisplayField>
+    <errorMessage>Feedback Rating must be an integer between 1 and 5.</errorMessage>
+</ValidationRule>

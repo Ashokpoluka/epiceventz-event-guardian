@@ -1,0 +1,56 @@
+<template>
+    <lightning-card title="EpicEventz - Public Event Discovery Portal" icon-name="standard:event">
+        <div class="slds-p-around_medium">
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading Events..." size="medium"></lightning-spinner>
+            </template>
+
+            <!-- Search & Filter Bar -->
+            <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                <div class="slds-col slds-size_2-of-3">
+                    <lightning-input 
+                        type="search" 
+                        label="Search Events" 
+                        placeholder="Search by name or category..." 
+                        value={searchTerm}
+                        onchange={handleSearchChange}>
+                    </lightning-input>
+                </div>
+            </div>
+
+            <!-- Event Cards Grid -->
+            <template if:true={hasEvents}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <template for:each={filteredEvents} for:item="evt">
+                        <div key={evt.Id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_medium">
+                            <div class="slds-box slds-box_link slds-theme_default event-card">
+                                <div class="slds-text-heading_medium slds-truncate">{evt.Name}</div>
+                                <div class="slds-badge slds-theme_success slds-m-top_x-small">{evt.Category__c}</div>
+                                <p class="slds-m-top_small"><strong>Venue:</strong> {evt.Venue_Name}</p>
+                                <p><strong>Start:</strong> {evt.FormattedStart}</p>
+                                <div class="slds-m-top_small slds-grid slds-grid_align-spread">
+                                    <span class="slds-text-color_weak">Available Seats: <strong>{evt.Available_Seats__c}</strong></span>
+                                    <lightning-button 
+                                        variant="brand" 
+                                        label="Select Tickets" 
+                                        data-id={evt.Id} 
+                                        onclick={handleSelectEvent}>
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- Empty State -->
+            <template if:false={hasEvents}>
+                <div class="slds-text-align_center slds-p-around_large">
+                    <lightning-icon icon-name="utility:info" size="large"></lightning-icon>
+                    <p class="slds-text-heading_small slds-m-top_medium">No published events found matching your query.</p>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

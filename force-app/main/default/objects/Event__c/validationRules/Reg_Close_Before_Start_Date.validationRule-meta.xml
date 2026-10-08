@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reg_Close_Before_Start_Date</fullName>
+    <active>true</active>
+    <description>Ensures that Registration Close Date is before the Event Start Date &amp; Time.</description>
+    <errorConditionFormula>NOT(ISBLANK(Registration_Close_Date__c)) &amp;&amp; Registration_Close_Date__c &gt;= Start_Date_Time__c</errorConditionFormula>
+    <errorDisplayField>Registration_Close_Date__c</errorDisplayField>
+    <errorMessage>Registration Close Date &amp; Time must be before the Event Start Date &amp; Time.</errorMessage>
+</ValidationRule>

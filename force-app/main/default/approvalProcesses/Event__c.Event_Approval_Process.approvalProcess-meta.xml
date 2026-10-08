@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApprovalProcess xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <allowRecall>true</allowRecall>
+    <showApprovalHistory>true</showApprovalHistory>
+    <label>Event Approval Process</label>
+    <description>Standard administrative approval process for published events.</description>
+    <finalApprovalActions>
+        <action>
+            <name>Set_Status_Approved</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalApprovalActions>
+    <finalRejectionActions>
+        <action>
+            <name>Set_Status_Draft</name>
+            <type>FieldUpdate</type>
+        </action>
+    </finalRejectionActions>
+    <initialSubmissionActions>
+        <action>
+            <name>Set_Status_Pending</name>
+            <type>FieldUpdate</type>
+        </action>
+    </initialSubmissionActions>
+    <label>Event Approval Process</label>
+    <processOrder>1</processOrder>
+    <recordEditability>AdminOrCurrentApprover</recordEditability>
+</ApprovalProcess>

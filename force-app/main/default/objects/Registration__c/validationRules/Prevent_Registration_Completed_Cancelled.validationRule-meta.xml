@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Registration_Completed_Cancelled</fullName>
+    <active>true</active>
+    <description>Prevents creation or modification of registrations for events that are Completed or Cancelled.</description>
+    <errorConditionFormula>TEXT(Event__r.Status__c) = 'Completed' || TEXT(Event__r.Status__c) = 'Cancelled'</errorConditionFormula>
+    <errorMessage>Registrations cannot be created or modified for events that are Completed or Cancelled.</errorMessage>
+</ValidationRule>

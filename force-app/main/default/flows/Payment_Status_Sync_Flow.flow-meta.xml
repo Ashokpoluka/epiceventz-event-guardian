@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <decisions>
+        <name>Is_Payment_Success</name>
+        <label>Is Payment Success?</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Payment_Is_Success</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Payment_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Success</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Parent_Registration</targetReference>
+            </connector>
+            <label>Payment Is Success</label>
+        </rules>
+    </decisions>
+    <description>Automatically updates parent Registration status to Confirmed and Payment Status to Paid when Payment succeeds.</description>
+    <environments>Default</environments>
+    <interviewLabel>Payment Status Sync Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Payment Status Sync Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Parent_Registration</name>
+        <label>Update Parent Registration</label>
+        <locationX>50</locationX>
+        <locationY>435</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Registration__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Payment_Status__c</field>
+            <value>
+                <stringValue>Paid</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Confirmed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Registration__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_Payment_Success</targetReference>
+        </connector>
+        <object>Payment__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Only_Approved_Events_Can_Publish</fullName>
+    <active>true</active>
+    <description>Ensures that an Event can only be moved to Published status if it was previously Approved.</description>
+    <errorConditionFormula>ISCHANGED(Status__c) &amp;&amp; TEXT(Status__c) = 'Published' &amp;&amp; TEXT(PRIORVALUE(Status__c)) != 'Approved' &amp;&amp; TEXT(PRIORVALUE(Status__c)) != 'Registration Open'</errorConditionFormula>
+    <errorDisplayField>Status__c</errorDisplayField>
+    <errorMessage>Only Approved events can be Published to the public portal.</errorMessage>
+</ValidationRule>

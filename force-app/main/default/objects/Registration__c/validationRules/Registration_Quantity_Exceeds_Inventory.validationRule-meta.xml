@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Registration_Quantity_Exceeds_Inventory</fullName>
+    <active>true</active>
+    <description>Prevents booking ticket quantity greater than remaining inventory on the selected ticket type.</description>
+    <errorConditionFormula>NOT(ISBLANK(Ticket_Type__c)) &amp;&amp; Quantity__c &gt; Ticket_Type__r.Remaining_Quantity__c</errorConditionFormula>
+    <errorDisplayField>Quantity__c</errorDisplayField>
+    <errorMessage>Requested ticket quantity exceeds remaining available inventory for this ticket type.</errorMessage>
+</ValidationRule>

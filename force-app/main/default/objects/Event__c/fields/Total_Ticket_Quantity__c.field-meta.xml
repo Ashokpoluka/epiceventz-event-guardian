@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Ticket_Quantity__c</fullName>
+    <label>Total Ticket Quantity</label>
+    <type>Summary</type>
+    <summaryForeignKey>Ticket_Type__c.Event__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <summarizedField>Ticket_Type__c.Quantity_Available__c</summarizedField>
+</CustomField>

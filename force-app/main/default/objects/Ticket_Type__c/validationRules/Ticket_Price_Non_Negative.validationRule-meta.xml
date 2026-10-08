@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Ticket_Price_Non_Negative</fullName>
+    <active>true</active>
+    <description>Ensures that ticket price cannot be a negative value.</description>
+    <errorConditionFormula>Price__c &lt; 0</errorConditionFormula>
+    <errorDisplayField>Price__c</errorDisplayField>
+    <errorMessage>Ticket Price must be greater than or equal to 0.</errorMessage>
+</ValidationRule>

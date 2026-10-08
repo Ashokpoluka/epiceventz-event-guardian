@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <decisions>
+        <name>Is_Registration_Confirmed</name>
+        <label>Is Registration Confirmed?</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Registration_Is_Confirmed</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Confirmed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Payment_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Paid</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Ticket_Type</targetReference>
+            </connector>
+            <label>Registration Is Confirmed</label>
+        </rules>
+    </decisions>
+    <description>Automatically increments Quantity_Sold__c on Ticket_Type__c when a Registration becomes Confirmed or Paid.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>Updated_Quantity_Sold</name>
+        <dataType>Number</dataType>
+        <expression>{!Get_Ticket_Type.Quantity_Sold__c} + {!$Record.Quantity__c}</expression>
+        <scale>0</scale>
+    </formulas>
+    <interviewLabel>Ticket Inventory Deduction Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Ticket Inventory Deduction Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Ticket_Type</name>
+        <label>Get Ticket Type</label>
+        <locationX>50</locationX>
+        <locationY>435</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Ticket_Quantity_Sold</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Ticket_Type__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Ticket_Type__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Ticket_Quantity_Sold</name>
+        <label>Update Ticket Quantity Sold</label>
+        <locationX>50</locationX>
+        <locationY>545</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Ticket_Type__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Quantity_Sold__c</field>
+            <value>
+                <elementReference>Updated_Quantity_Sold</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Ticket_Type__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_Registration_Confirmed</targetReference>
+        </connector>
+        <object>Registration__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
