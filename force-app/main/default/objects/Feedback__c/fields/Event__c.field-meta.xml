@@ -7,4 +7,5 @@
     <relationshipLabel>Feedbacks</relationshipLabel>
     <relationshipName>Feedbacks</relationshipName>
     <required>true</required>
+    <deleteConstraint>Restrict</deleteConstraint>
 </CustomField>

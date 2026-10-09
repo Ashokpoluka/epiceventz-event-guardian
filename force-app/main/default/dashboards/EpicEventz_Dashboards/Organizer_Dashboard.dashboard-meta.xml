@@ -9,14 +9,12 @@
             <columnIndex>0</columnIndex>
             <dashboardComponent>
                 <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
-                <chartType>Donut</chartType>
+                <chartAxisRange>Auto</chartAxisRange>
+                <componentType>Donut</componentType>
                 <displayUnits>Auto</displayUnits>
                 <header>Events by Status</header>
-                <indicatorHighColor>#006400</indicatorHighColor>
-                <indicatorLowColor>#C23934</indicatorLowColor>
-                <indicatorMiddleColor>#E2A200</indicatorMiddleColor>
                 <report>EpicEventz_Reports/Events_by_Status</report>
-                <showHeader>true</showHeader>
+                <sortBy>RowLabelAscending</sortBy>
             </dashboardComponent>
             <rowIndex>0</rowIndex>
             <rowSpan>8</rowSpan>
@@ -26,14 +24,12 @@
             <columnIndex>6</columnIndex>
             <dashboardComponent>
                 <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
-                <chartType>Bar</chartType>
+                <chartAxisRange>Auto</chartAxisRange>
+                <componentType>Bar</componentType>
                 <displayUnits>Auto</displayUnits>
                 <header>Revenue by Event</header>
-                <indicatorHighColor>#006400</indicatorHighColor>
-                <indicatorLowColor>#C23934</indicatorLowColor>
-                <indicatorMiddleColor>#E2A200</indicatorMiddleColor>
                 <report>EpicEventz_Reports/Revenue_by_Event</report>
-                <showHeader>true</showHeader>
+                <sortBy>RowLabelAscending</sortBy>
             </dashboardComponent>
             <rowIndex>0</rowIndex>
             <rowSpan>8</rowSpan>
@@ -42,9 +38,9 @@
         <rowHeight>36</rowHeight>
     </dashboardGridLayout>
     <isGridLayout>true</isGridLayout>
-    <label>Organizer Dashboard</label>
     <runningUser>ashokpoluka2005@curious-panda-4c3o15.com</runningUser>
     <textColor>#000000</textColor>
+    <title>Organizer Dashboard</title>
     <titleColor>#000000</titleColor>
     <titleSize>12</titleSize>
 </Dashboard>

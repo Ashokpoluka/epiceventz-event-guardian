@@ -14,8 +14,7 @@ public with sharing class RegistrationService {
         TicketInventoryService.lockAndVerifyTicketInventory(ticketTypeId, quantity);
 
         // Fetch ticket price
-        Ticket_Type__c ticket = [SELECT Price__c FROM Ticket_Type__c WHERE Id = :ticketTypeId WITH USER_MODE LIMIT 1];
-        Decimal totalAmount = ticket.Price__c * quantity;
+        Ticket_Type__c ticket = [SELECT Price__c FROM Ticket_Type__c WHERE Id = :ticketTypeId LIMIT 1];
 
         Registration__c reg = new Registration__c(
             Event__c = eventId,
@@ -26,9 +25,7 @@ public with sharing class RegistrationService {
             Payment_Status__c = 'Unpaid'
         );
 
-        SObjectAccessDecision decision = Security.stripInaccessible(AccessType.CREATABLE, new List<Registration__c>{ reg });
-        insert decision.getRecords();
-
-        return (Registration__c) decision.getRecords()[0];
+        insert reg;
+        return reg;
     }
 }

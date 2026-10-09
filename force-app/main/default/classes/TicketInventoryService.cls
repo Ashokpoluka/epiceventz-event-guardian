@@ -13,7 +13,6 @@ public with sharing class TicketInventoryService {
             SELECT Id, Name, Price__c, Quantity_Available__c, Quantity_Sold__c, Remaining_Quantity__c, Active__c
             FROM Ticket_Type__c
             WHERE Event__c = :eventId AND Active__c = true
-            WITH USER_MODE
             ORDER BY Price__c ASC
         ];
     }

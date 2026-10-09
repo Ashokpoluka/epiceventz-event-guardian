@@ -7,4 +7,5 @@
     <relationshipLabel>Payments</relationshipLabel>
     <relationshipName>Payments</relationshipName>
     <required>true</required>
+    <deleteConstraint>Restrict</deleteConstraint>
 </CustomField>

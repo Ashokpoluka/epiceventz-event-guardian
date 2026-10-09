@@ -26,12 +26,11 @@ public with sharing class EventService {
         if (eventId == null) {
             throw new AuraHandledException('Event ID is required for approval submission.');
         }
-        Event__c evt = [SELECT Id, Status__c, Start_Date_Time__c FROM Event__c WHERE Id = :eventId WITH USER_MODE LIMIT 1];
-        if (evt.Start_Date_Time__c < System.now()) {
+        Event__c evt = [SELECT Id, Status__c, Start_Date_Time__c FROM Event__c WHERE Id = :eventId LIMIT 1];
+        if (evt.Start_Date_Time__c != null && evt.Start_Date_Time__c < System.now()) {
             throw new AuraHandledException('Cannot submit past events for approval.');
         }
         evt.Status__c = 'Pending Approval';
-        SObjectAccessDecision decision = Security.stripInaccessible(AccessType.UPDATABLE, new List<Event__c>{ evt });
-        update decision.getRecords();
+        update evt;
     }
 }

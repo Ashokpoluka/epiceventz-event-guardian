@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ApprovalProcess xmlns="http://soap.sforce.com/2006/04/metadata">
-    <active>true</active>
+    <active>false</active>
     <allowRecall>true</allowRecall>
     <showApprovalHistory>true</showApprovalHistory>
     <label>Event Approval Process</label>
     <description>Standard administrative approval process for published events.</description>
+    <allowedSubmitters>
+        <type>owner</type>
+    </allowedSubmitters>
     <finalApprovalActions>
         <action>
             <name>Set_Status_Approved</name>
@@ -23,7 +26,6 @@
             <type>FieldUpdate</type>
         </action>
     </initialSubmissionActions>
-    <label>Event Approval Process</label>
     <processOrder>1</processOrder>
     <recordEditability>AdminOrCurrentApprover</recordEditability>
 </ApprovalProcess>

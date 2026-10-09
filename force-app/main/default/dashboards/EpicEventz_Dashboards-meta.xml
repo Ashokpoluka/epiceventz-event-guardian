@@ -2,8 +2,8 @@
 <DashboardFolder xmlns="http://soap.sforce.com/2006/04/metadata">
     <folderShares>
         <accessLevel>Manage</accessLevel>
-        <sharedTo>SystemAdministrator</sharedTo>
-        <sharedToType>Role</sharedToType>
+        <sharedTo>Organization</sharedTo>
+        <sharedToType>Organization</sharedToType>
     </folderShares>
     <name>EpicEventz Dashboards</name>
 </DashboardFolder>
