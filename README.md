@@ -1,4 +1,4 @@
-# EPICEVENTZ - Unified B2B2C Event Management Platform
+# EPICEVENTZ - Unified B2B2C Event Management Platform & Event Guardian
 
 > **Cognizant NPN Salesforce Hackathon 2027 Submission**
 
