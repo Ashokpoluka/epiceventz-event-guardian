@@ -1,0 +1,257 @@
+<template>
+    <div class="guardian-page slds-p-around_medium slds-theme_default">
+        <!-- Hero Header -->
+        <div class="guardian-header slds-p-around_medium slds-m-bottom_medium slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+            <div class="slds-media slds-media_center">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-approval hero-icon">
+                        <lightning-icon icon-name="standard:approval" size="large"></lightning-icon>
+                    </span>
+                </div>
+                <div class="slds-media__body slds-m-left_small">
+                    <h1 class="slds-text-heading_medium hero-title">Event Guardian AI Engine</h1>
+                    <p class="slds-text-body_regular hero-subtitle">
+                        Autonomous Predictive Event Health Diagnostics &amp; Risk Mitigation Center
+                    </p>
+                </div>
+            </div>
+            <div class="slds-grid slds-grid_vertical-align-center">
+                <template if:true={lastAnalyzedTime}>
+                    <span class="slds-text-body_small slds-text-color_weak slds-m-right_medium">
+                        Last Analyzed: {lastAnalyzedTime}
+                    </span>
+                </template>
+                <lightning-button-icon 
+                    icon-name="utility:refresh" 
+                    alternative-text="Refresh Guardian Analysis" 
+                    onclick={handleRefresh} 
+                    title="Refresh Guardian Analysis">
+                </lightning-button-icon>
+            </div>
+        </div>
+
+        <!-- Event Selector Card -->
+        <div class="slds-card slds-p-around_medium slds-m-bottom_medium selector-card">
+            <div class="slds-grid slds-wrap slds-gutters slds-grid_vertical-align-end">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                    <lightning-combobox
+                        name="eventSelector"
+                        label="Select Target Event to Run Guardian Diagnostics"
+                        placeholder="Choose an Event..."
+                        options={eventOptions}
+                        value={selectedEventId}
+                        onchange={handleEventChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-m-top_small">
+                    <lightning-button 
+                        variant="brand" 
+                        label="Run Live Guardian Diagnostics" 
+                        icon-name="utility:shield" 
+                        onclick={handleRefresh} 
+                        class="slds-m-top_small slds-button_stretch">
+                    </lightning-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spinner Holder -->
+        <template if:true={isLoading}>
+            <div class="spinner-container">
+                <lightning-spinner alternative-text="Analyzing with Event Guardian AI..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Guardian Diagnostic Output -->
+        <template if:false={isLoading}>
+            <template if:true={guardianData}>
+                <!-- Health Overview Banner -->
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                    <!-- Left: Health Score Card -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12">
+                        <div class="health-summary-card slds-p-around_large slds-text-align_center">
+                            <div class="score-ring {healthScoreBadgeClass}">
+                                <div class="score-number">{guardianData.healthScore}</div>
+                                <div class="score-scale">/ 100</div>
+                            </div>
+                            <div class="health-status-badge {healthScoreBadgeClass} slds-m-top_medium">
+                                {guardianData.healthStatus}
+                            </div>
+                            <h2 class="slds-text-heading_small slds-m-top_small event-label-title">
+                                {guardianData.eventName}
+                            </h2>
+                            <lightning-badge label={guardianData.status} class="slds-m-top_xx-small"></lightning-badge>
+                        </div>
+                    </div>
+
+                    <!-- Right: Health Tiers & Methodology -->
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12">
+                        <div class="slds-card slds-p-around_medium tier-card">
+                            <h2 class="slds-text-title_bold slds-m-bottom_small">GUARDIAN HEALTH BENCHMARKS &amp; TIERS</h2>
+                            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="tier-badge-box tier-excellent">
+                                        <div class="tier-range">90 – 100</div>
+                                        <div class="tier-label">Excellent</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="tier-badge-box tier-healthy">
+                                        <div class="tier-range">75 – 89</div>
+                                        <div class="tier-label">Healthy</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="tier-badge-box tier-atrisk">
+                                        <div class="tier-range">50 – 74</div>
+                                        <div class="tier-label">At Risk</div>
+                                    </div>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_x-small">
+                                    <div class="tier-badge-box tier-critical">
+                                        <div class="tier-range">0 – 49</div>
+                                        <div class="tier-label">Critical</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="slds-text-body_small slds-text-color_weak">
+                                The Event Guardian AI Engine performs continuous multidimensional evaluation across 6 real-time operational streams, synthesizing data into predictive risk forecasts and automated mitigation interventions.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6-Factor Weighted Metrics Breakdown -->
+                <div class="slds-card slds-p-around_medium slds-m-bottom_medium metrics-panel">
+                    <h2 class="slds-text-title_bold slds-m-bottom_medium">
+                        KEY HEALTH METRICS BREAKDOWN (WEIGHTED 6-FACTOR MODEL)
+                    </h2>
+                    <div class="slds-grid slds-wrap slds-gutters">
+                        <!-- Metric 1: Registration/Ticket Performance (25%) -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_medium">
+                            <div class="metric-block slds-p-around_small">
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <span class="metric-name">Ticket Performance</span>
+                                    <span class="metric-weight">Weight: 25%</span>
+                                </div>
+                                <div class="metric-score slds-m-top_x-small">{guardianData.ticketPerformanceScore}%</div>
+                                <lightning-progress-bar value={guardianData.ticketPerformanceScore} size="small" class="slds-m-top_x-small"></lightning-progress-bar>
+                            </div>
+                        </div>
+
+                        <!-- Metric 2: Payment Success (15%) -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_medium">
+                            <div class="metric-block slds-p-around_small">
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <span class="metric-name">Payment Success</span>
+                                    <span class="metric-weight">Weight: 15%</span>
+                                </div>
+                                <div class="metric-score slds-m-top_x-small">{guardianData.paymentSuccessScore}%</div>
+                                <lightning-progress-bar value={guardianData.paymentSuccessScore} size="small" class="slds-m-top_x-small"></lightning-progress-bar>
+                            </div>
+                        </div>
+
+                        <!-- Metric 3: Attendance (20%) -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_medium">
+                            <div class="metric-block slds-p-around_small">
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <span class="metric-name">Attendance Check-In</span>
+                                    <span class="metric-weight">Weight: 20%</span>
+                                </div>
+                                <div class="metric-score slds-m-top_x-small">{guardianData.attendanceScore}%</div>
+                                <lightning-progress-bar value={guardianData.attendanceScore} size="small" class="slds-m-top_x-small"></lightning-progress-bar>
+                            </div>
+                        </div>
+
+                        <!-- Metric 4: Feedback Rating (15%) -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_medium">
+                            <div class="metric-block slds-p-around_small">
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <span class="metric-name">Feedback Rating</span>
+                                    <span class="metric-weight">Weight: 15%</span>
+                                </div>
+                                <div class="metric-score slds-m-top_x-small">{guardianData.feedbackScore}%</div>
+                                <lightning-progress-bar value={guardianData.feedbackScore} size="small" class="slds-m-top_x-small"></lightning-progress-bar>
+                            </div>
+                        </div>
+
+                        <!-- Metric 5: Cancellation Rate (10%) -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_medium">
+                            <div class="metric-block slds-p-around_small">
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <span class="metric-name">Retention (Low Cancellation)</span>
+                                    <span class="metric-weight">Weight: 10%</span>
+                                </div>
+                                <div class="metric-score slds-m-top_x-small">{guardianData.cancellationScore}%</div>
+                                <lightning-progress-bar value={guardianData.cancellationScore} size="small" class="slds-m-top_x-small"></lightning-progress-bar>
+                            </div>
+                        </div>
+
+                        <!-- Metric 6: Support Issues (15%) -->
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_medium">
+                            <div class="metric-block slds-p-around_small">
+                                <div class="slds-grid slds-grid_align-spread">
+                                    <span class="metric-name">Support Stability</span>
+                                    <span class="metric-weight">Weight: 15%</span>
+                                </div>
+                                <div class="metric-score slds-m-top_x-small">{guardianData.supportScore}%</div>
+                                <lightning-progress-bar value={guardianData.supportScore} size="small" class="slds-m-top_x-small"></lightning-progress-bar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detected Risks, Evidence, Root Cause & Recommendations -->
+                <div class="slds-card slds-p-around_medium risks-panel">
+                    <div class="slds-grid slds-grid_align-spread slds-m-bottom_medium slds-grid_vertical-align-center">
+                        <h2 class="slds-text-title_bold">
+                            DETECTED OPERATIONAL RISKS, EVIDENCE &amp; RECOMMENDATIONS
+                        </h2>
+                        <lightning-badge label="Live Diagnostic Feed"></lightning-badge>
+                    </div>
+
+                    <template if:true={hasRisks}>
+                        <template for:each={guardianData.detectedRisks} for:item="risk">
+                            <div key={risk.risk} class="risk-card slds-p-around_medium slds-m-bottom_medium">
+                                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                    <div class="slds-grid slds-grid_vertical-align-center">
+                                        <lightning-icon icon-name="utility:warning" size="small" class="risk-icon slds-m-right_small"></lightning-icon>
+                                        <span class="risk-title">{risk.risk}</span>
+                                    </div>
+                                    <lightning-badge label={risk.severity} class="severity-badge"></lightning-badge>
+                                </div>
+
+                                <div class="risk-section slds-m-top_small">
+                                    <div class="section-label">Empirical Evidence:</div>
+                                    <div class="section-text">{risk.evidence}</div>
+                                </div>
+
+                                <div class="risk-section slds-m-top_x-small">
+                                    <div class="section-label">AI Root Cause Analysis:</div>
+                                    <div class="section-text">{risk.rootCause}</div>
+                                </div>
+
+                                <div class="risk-section slds-m-top_x-small recommendation-box">
+                                    <div class="section-label recommendation-title">Actionable Recommendation:</div>
+                                    <div class="section-text recommendation-body">{risk.recommendation}</div>
+                                </div>
+
+                                <!-- Suggested Action Execution Button -->
+                                <div class="slds-m-top_medium slds-grid slds-grid_align-end">
+                                    <lightning-button 
+                                        variant="brand-outline" 
+                                        label="Execute Suggested Action" 
+                                        icon-name="utility:forward" 
+                                        data-action={risk.action}
+                                        data-risk={risk.risk}
+                                        onclick={handleExecuteAction}>
+                                    </lightning-button>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </template>
+        </template>
+    </div>
+</template>

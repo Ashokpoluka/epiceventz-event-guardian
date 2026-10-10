@@ -1,0 +1,282 @@
+<template>
+    <div class="slds-box slds-theme_default main-container slds-p-around_medium">
+        <!-- App Header Banner -->
+        <div class="header-card slds-p-around_medium slds-m-bottom_medium slds-grid slds-grid_vertical-align-center slds-grid_align-spread">
+            <div class="slds-media slds-media_center">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-standard-event header-icon">
+                        <lightning-icon icon-name="standard:event" size="large"></lightning-icon>
+                    </span>
+                </div>
+                <div class="slds-media__body slds-m-left_small">
+                    <h1 class="slds-text-heading_medium app-title">EpicEventz Command Center</h1>
+                    <p class="slds-text-body_regular app-subtitle">
+                        Smart Event Management &amp; Autonomous Event Guardian Engine
+                    </p>
+                </div>
+            </div>
+            <div class="slds-grid slds-grid_vertical-align-center">
+                <lightning-badge label="Real-time Analytics" class="slds-m-right_small slds-theme_success"></lightning-badge>
+                <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh Metrics" onclick={handleRefresh} title="Refresh Dashboard"></lightning-button-icon>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="spinner-holder">
+                <lightning-spinner alternative-text="Loading Metrics" size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- KPI Metrics Grid -->
+        <template if:false={isLoading}>
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                <!-- Total Events -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_small">
+                    <div class="kpi-card slds-p-around_medium">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <span class="kpi-label">TOTAL EVENTS</span>
+                            <lightning-icon icon-name="utility:event" size="small" variant="brand"></lightning-icon>
+                        </div>
+                        <div class="kpi-value slds-m-top_x-small">{metrics.totalEvents}</div>
+                        <div class="kpi-subtext slds-text-color_weak">{metrics.upcomingEvents} Upcoming Active</div>
+                    </div>
+                </div>
+
+                <!-- Tickets Sold / Registrations -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_small">
+                    <div class="kpi-card slds-p-around_medium">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <span class="kpi-label">TICKETS SOLD</span>
+                            <lightning-icon icon-name="utility:ticket" size="small" variant="brand"></lightning-icon>
+                        </div>
+                        <div class="kpi-value slds-m-top_x-small">{metrics.ticketsSold}</div>
+                        <div class="kpi-subtext slds-text-color_weak">{metrics.totalRegistrations} Total Bookings</div>
+                    </div>
+                </div>
+
+                <!-- Realized Revenue -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_small">
+                    <div class="kpi-card slds-p-around_medium">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <span class="kpi-label">TOTAL REVENUE</span>
+                            <lightning-icon icon-name="utility:moneybag" size="small" class="success-icon"></lightning-icon>
+                        </div>
+                        <div class="kpi-value slds-m-top_x-small">${formattedRevenue}</div>
+                        <div class="kpi-subtext slds-text-color_weak">Verified Gateway Receipts</div>
+                    </div>
+                </div>
+
+                <!-- Attendance Checked-In -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-m-bottom_small">
+                    <div class="kpi-card slds-p-around_medium">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <span class="kpi-label">ATTENDANCE</span>
+                            <lightning-icon icon-name="utility:check" size="small" variant="brand"></lightning-icon>
+                        </div>
+                        <div class="kpi-value slds-m-top_x-small">{metrics.totalAttendance}</div>
+                        <div class="kpi-subtext slds-text-color_weak">Checked-In Attendees</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Metrics Bar -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                <!-- Average Rating -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                    <div class="kpi-card-secondary slds-p-around_medium slds-grid slds-grid_vertical-align-center">
+                        <lightning-icon icon-name="utility:rating" size="medium" class="warning-icon slds-m-right_medium"></lightning-icon>
+                        <div>
+                            <div class="kpi-label">AVERAGE FEEDBACK RATING</div>
+                            <div class="kpi-subvalue">{metrics.averageFeedbackRating} / 5.0 ⭐</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Open Support Cases -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                    <div class="kpi-card-secondary slds-p-around_medium slds-grid slds-grid_vertical-align-center">
+                        <lightning-icon icon-name="utility:case" size="medium" variant="error" class="slds-m-right_medium"></lightning-icon>
+                        <div>
+                            <div class="kpi-label">OPEN SUPPORT CASES</div>
+                            <div class="kpi-subvalue">{metrics.openSupportCases} In Queue</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- At-Risk Events -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-bottom_small">
+                    <div class="kpi-card-secondary slds-p-around_medium slds-grid slds-grid_vertical-align-center">
+                        <lightning-icon icon-name="utility:warning" size="medium" class="warning-icon slds-m-right_medium"></lightning-icon>
+                        <div>
+                            <div class="kpi-label">ACTIONABLE EVENTS</div>
+                            <div class="kpi-subvalue">{metrics.atRiskEvents} Requires Attention</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Tabbed Workspace -->
+            <lightning-tabset class="custom-tabs" active-tab-value="guardian">
+                <!-- EVENT GUARDIAN TAB -->
+                <lightning-tab label="🛡️ Event Guardian AI" value="guardian">
+                    <div class="slds-p-around_medium guardian-container">
+                        <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium slds-grid_vertical-align-center">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                                <lightning-combobox
+                                    name="eventSelect"
+                                    label="Select Event for Real-Time Guardian Health Analysis"
+                                    placeholder="Choose an Event..."
+                                    options={eventOptions}
+                                    value={selectedEventId}
+                                    onchange={handleEventSelection}>
+                                </lightning-combobox>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-m-top_medium">
+                                <lightning-button variant="brand" label="Analyze with Event Guardian" icon-name="utility:shield" onclick={runGuardianAnalysis} class="slds-m-top_small"></lightning-button>
+                            </div>
+                        </div>
+
+                        <!-- Guardian Report Card -->
+                        <template if:true={guardianData}>
+                            <div class="guardian-card slds-p-around_medium slds-m-top_small">
+                                <!-- Health Score Header -->
+                                <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_medium">
+                                    <div>
+                                        <h2 class="slds-text-heading_medium guardian-event-name">{guardianData.eventName}</h2>
+                                        <p class="slds-text-body_small slds-text-color_weak">Status: {guardianData.status}</p>
+                                    </div>
+                                    <div class="slds-text-align_right">
+                                        <div class="health-score-badge {healthClass}">
+                                            {guardianData.healthScore} / 100
+                                        </div>
+                                        <div class="health-status-text slds-m-top_xx-small">{guardianData.healthStatus}</div>
+                                    </div>
+                                </div>
+
+                                <!-- Weighted Metrics Breakdown -->
+                                <h3 class="slds-text-title_bold slds-m-bottom_small">6-FACTOR GUARDIAN METRICS BREAKDOWN</h3>
+                                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-6">
+                                        <div class="sub-metric-box">
+                                            <div class="sub-metric-title">Tickets (25%)</div>
+                                            <div class="sub-metric-val">{guardianData.ticketPerformanceScore}%</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-6">
+                                        <div class="sub-metric-box">
+                                            <div class="sub-metric-title">Payment (15%)</div>
+                                            <div class="sub-metric-val">{guardianData.paymentSuccessScore}%</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-6">
+                                        <div class="sub-metric-box">
+                                            <div class="sub-metric-title">Attendance (20%)</div>
+                                            <div class="sub-metric-val">{guardianData.attendanceScore}%</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-6">
+                                        <div class="sub-metric-box">
+                                            <div class="sub-metric-title">Feedback (15%)</div>
+                                            <div class="sub-metric-val">{guardianData.feedbackScore}%</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-6">
+                                        <div class="sub-metric-box">
+                                            <div class="sub-metric-title">Retention (10%)</div>
+                                            <div class="sub-metric-val">{guardianData.cancellationScore}%</div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-6">
+                                        <div class="sub-metric-box">
+                                            <div class="sub-metric-title">Support (15%)</div>
+                                            <div class="sub-metric-val">{guardianData.supportScore}%</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Detected Operational Risks & Evidence -->
+                                <h3 class="slds-text-title_bold slds-m-bottom_small">DETECTED RISKS, EVIDENCE &amp; RECOMMENDATIONS</h3>
+                                <template for:each={guardianData.detectedRisks} for:item="r">
+                                    <div key={r.risk} class="risk-item slds-p-around_small slds-m-bottom_small">
+                                        <div class="slds-grid slds-grid_align-spread">
+                                            <span class="risk-name">⚠️ {r.risk}</span>
+                                            <lightning-badge label={r.severity} class="severity-badge"></lightning-badge>
+                                        </div>
+                                        <div class="risk-detail slds-m-top_xx-small">
+                                            <strong>Evidence:</strong> {r.evidence}
+                                        </div>
+                                        <div class="risk-detail slds-m-top_xx-small">
+                                            <strong>Root Cause:</strong> {r.rootCause}
+                                        </div>
+                                        <div class="risk-detail slds-m-top_xx-small slds-text-color_success">
+                                            <strong>Actionable Recommendation:</strong> {r.recommendation}
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </lightning-tab>
+
+                <!-- EVENTS OVERVIEW TAB -->
+                <lightning-tab label="📅 Events Catalog" value="events">
+                    <div class="slds-p-around_medium">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">Event Name</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Venue</th>
+                                    <th scope="col">Capacity</th>
+                                    <th scope="col">Registrations</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={metrics.recentEvents} for:item="evt">
+                                    <tr key={evt.Id}>
+                                        <td><strong>{evt.Name}</strong></td>
+                                        <td><lightning-badge label={evt.Status__c}></lightning-badge></td>
+                                        <td>{evt.Venue__r.Name}</td>
+                                        <td>{evt.Capacity__c}</td>
+                                        <td>{evt.Registration_Count__c}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </lightning-tab>
+
+                <!-- REGISTRATIONS TAB -->
+                <lightning-tab label="🎟️ Recent Registrations" value="registrations">
+                    <div class="slds-p-around_medium">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th scope="col">Registration</th>
+                                    <th scope="col">Event</th>
+                                    <th scope="col">Attendee</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Payment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={metrics.recentRegistrations} for:item="reg">
+                                    <tr key={reg.Id}>
+                                        <td><strong>{reg.Name}</strong></td>
+                                        <td>{reg.Event__r.Name}</td>
+                                        <td>{reg.Attendee__r.Name}</td>
+                                        <td>{reg.Quantity__c}</td>
+                                        <td><lightning-badge label={reg.Status__c}></lightning-badge></td>
+                                        <td><lightning-badge label={reg.Payment_Status__c}></lightning-badge></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </lightning-tab>
+            </lightning-tabset>
+        </template>
+    </div>
+</template>
